@@ -150,7 +150,7 @@ define(
         var count = 0;
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            var tmp = in_arr_boids[j];
+            var tmp = in_arr_boids[j].boid;
 
             var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
 
@@ -159,7 +159,7 @@ define(
                 curr.pos[1] - tmp_pos[1]
             ];
 
-            var len = utils_getLength(diff[0], diff[1]);
+            var len = in_arr_boids[j].len;
 
             if (len > in_radius)
                 continue;
@@ -206,18 +206,11 @@ define(
 
         var sum = [0, 0];
         var count = 0;
-        for (var j = 0; j < arr_boids.length; ++j)
+        for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            var tmp = arr_boids[j];
+            var tmp = in_arr_boids[j].boid;
 
-            var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
-
-            var diff = [
-                curr.pos[0] - tmp_pos[0],
-                curr.pos[1] - tmp_pos[1]
-            ];
-
-            var len = utils_getLength(diff[0], diff[1]);
+            var len = in_arr_boids[j].len;
 
             if (len > in_radius)
                 continue;
@@ -274,8 +267,6 @@ define(
         // 
 
         var desired = [
-            // in_center[0] - in_boid.pos[0],
-            // in_center[1] - in_boid.pos[1]
             in_center[0] - tmp_pos[0],
             in_center[1] - tmp_pos[1]
         ];
@@ -342,7 +333,7 @@ define(
                             if (len > 80) // <- max radius
                                 continue;
 
-                            tmp_arr_boids.push(tmp);
+                            tmp_arr_boids.push({boid:tmp, len:len});
                         }
 
                 } // slice the boids (cache)
