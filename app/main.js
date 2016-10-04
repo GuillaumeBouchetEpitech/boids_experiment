@@ -376,11 +376,6 @@ define(
             //
             // handle window limits
 
-                // if (curr.pos[0] < 0+20)    { curr.pos[0] = 0+20;   curr.vel[0] = 0; }
-                // if (curr.pos[0] > 800-20)  { curr.pos[0] = 800-20; curr.vel[0] = 0; }
-                // if (curr.pos[1] < 0+20)    { curr.pos[1] = 0+20;   curr.vel[1] = 0; }
-                // if (curr.pos[1] > 600-20)  { curr.pos[1] = 600-20; curr.vel[1] = 0; }
-
                 if (curr.pos[0] < 0)    { curr.pos[0] += 800; }
                 if (curr.pos[0] > 800)  { curr.pos[0] -= 800; }
                 if (curr.pos[1] < 0)    { curr.pos[1] += 600; }
@@ -402,15 +397,6 @@ define(
     function callback_mousemove(e) {
 
         // console.log(e);
-
-        // var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
-        // var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
-
-        // mouse[0] = movementX;
-        // mouse[1] = movementY;
-
-        // mouse[0] = e.clientX;
-        // mouse[1] = e.clientY;
 
         mouse[0] = e.pageX;
         mouse[1] = e.pageY;
