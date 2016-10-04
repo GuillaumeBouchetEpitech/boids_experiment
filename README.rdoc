@@ -2,6 +2,6 @@
 TODO...
 
 == Live demo
-link:https://guillaumebouchetepitech.github.io/boids_experiment/
+link:http://guillaumebouchetepitech.github.io/boids_experiment/
 
 == Thanks for watching !
