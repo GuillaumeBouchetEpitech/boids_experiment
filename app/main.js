@@ -155,8 +155,6 @@ define(
             var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
 
             var diff = [
-                // curr.pos[0] - tmp.pos[0],
-                // curr.pos[1] - tmp.pos[1]
                 curr.pos[0] - tmp_pos[0],
                 curr.pos[1] - tmp_pos[1]
             ];
@@ -215,8 +213,6 @@ define(
             var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
 
             var diff = [
-                // curr.pos[0] - tmp.pos[0],
-                // curr.pos[1] - tmp.pos[1]
                 curr.pos[0] - tmp_pos[0],
                 curr.pos[1] - tmp_pos[1]
             ];
@@ -263,8 +259,6 @@ define(
         var tmp_pos = utils_convertWorldPos(in_center, in_boid.pos)
 
         var diff = [
-            // in_center[0] - in_boid.pos[0],
-            // in_center[1] - in_boid.pos[1]
             in_center[0] - tmp_pos[0],
             in_center[1] - tmp_pos[1]
         ];
@@ -339,8 +333,6 @@ define(
                             var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
 
                             var diff = [
-                                // curr.pos[0] - tmp.pos[0],
-                                // curr.pos[1] - tmp.pos[1]
                                 curr.pos[0] - tmp_pos[0],
                                 curr.pos[1] - tmp_pos[1]
                             ];
