@@ -162,6 +162,31 @@ define(
 
 
 
+    function update_cache(in_arr_boids, in_curr_index, in_radius, out_cache)
+    {
+        var curr = in_arr_boids[in_curr_index];
+
+        for (var j = 0; j < in_arr_boids.length; ++j)
+            if (j != in_curr_index)
+            {
+                var tmp = in_arr_boids[j];
+
+                var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
+
+                var diff = [
+                    curr.pos[0] - tmp_pos[0],
+                    curr.pos[1] - tmp_pos[1]
+                ];
+
+                var len = utils_getLength(diff[0], diff[1]);
+
+                if (len > in_radius) // <- max radius
+                    continue;
+
+                out_cache.push({boid:tmp, len:len});
+            }
+
+    } // function update_cache
 
     function separate(in_arr_boids, in_curr, in_radius, in_ratio)
     {
@@ -334,30 +359,7 @@ define(
             // behavior
 
                 var tmp_arr_boids = [];
-
-                { // slice the boids (cache)
-
-                    for (var j = 0; j < arr_boids.length; ++j)
-                        if (j != i)
-                        {
-                            var tmp = arr_boids[j];
-
-                            var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
-
-                            var diff = [
-                                curr.pos[0] - tmp_pos[0],
-                                curr.pos[1] - tmp_pos[1]
-                            ];
-
-                            var len = utils_getLength(diff[0], diff[1]);
-
-                            if (len > 80) // <- max radius
-                                continue;
-
-                            tmp_arr_boids.push({boid:tmp, len:len});
-                        }
-
-                } // slice the boids (cache)
+                update_cache( arr_boids, i, 80, tmp_arr_boids)
 
                 separate( tmp_arr_boids, curr, 40, 0.8 );
                 cohesion( tmp_arr_boids, curr, 80, 0.2 ); // <- max radius
