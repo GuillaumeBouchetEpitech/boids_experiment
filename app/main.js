@@ -58,9 +58,21 @@ define(
     //
     // UTILS
 
+    // double-dog-leg hypothenuse approximation
+    // http://forums.parallax.com/discussion/147522/dog-leg-hypotenuse-approximation
+    function hypot(a, b)
+    {
+        a = Math.abs(a)
+        b = Math.abs(b)
+        var lo = Math.min(a, b)
+        var hi = Math.max(a, b)
+        return hi + 3 * lo / 32 + Math.max(0, 2 * lo - hi) / 8 + Math.max(0, 4 * lo - hi) / 16
+    }
+
     function utils_getLength(x, y)
     {
-        return Math.sqrt( (x)*(x) + (y)*(y) );
+        // return Math.sqrt( (x)*(x) + (y)*(y) );
+        return hypot(x, y);
     }
 
     function utils_normalise(arr_v2)
