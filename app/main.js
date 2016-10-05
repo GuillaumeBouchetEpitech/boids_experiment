@@ -161,6 +161,13 @@ define(
 
 
 
+    // declared here to avoid seless on the fly variable creation
+    var diff = new k_array_type([0, 0]);
+    var sum = new k_array_type([0, 0]);
+    var count = 0;
+    var desired = new k_array_type([0, 0]);
+    var steer = new k_array_type([0, 0]);
+
 
     function update_cache(in_arr_boids, in_curr_index, in_radius, out_cache)
     {
@@ -169,39 +176,31 @@ define(
         for (var j = 0; j < in_arr_boids.length; ++j)
             if (j != in_curr_index)
             {
-                var tmp = in_arr_boids[j];
+                var tmp_pos = utils_convertWorldPos(curr.pos, in_arr_boids[j].pos)
 
-                var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
-
-                var diff = [
-                    curr.pos[0] - tmp_pos[0],
-                    curr.pos[1] - tmp_pos[1]
-                ];
+                diff[0] = curr.pos[0] - tmp_pos[0];
+                diff[1] = curr.pos[1] - tmp_pos[1];
 
                 var len = utils_getLength(diff[0], diff[1]);
 
                 if (len > in_radius) // <- max radius
                     continue;
 
-                out_cache.push({boid:tmp, len:len});
+                out_cache.push({boid:in_arr_boids[j], len:len});
             }
 
     } // function update_cache
 
     function separate(in_arr_boids, in_curr, in_radius, in_ratio)
     {
-        var curr = in_curr;
+        count = sum[0] = sum[1] = 0; // reset
 
-        var sum = [0, 0];
-        var count = 0;
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            var tmp_pos = utils_convertWorldPos(curr.pos, in_arr_boids[j].boid.pos)
+            var tmp_pos = utils_convertWorldPos(in_curr.pos, in_arr_boids[j].boid.pos)
 
-            var diff = [
-                curr.pos[0] - tmp_pos[0],
-                curr.pos[1] - tmp_pos[1]
-            ];
+            diff[0] = in_curr.pos[0] - tmp_pos[0];
+            diff[1] = in_curr.pos[1] - tmp_pos[1];
 
             if (in_arr_boids[j].len > in_radius)
                 continue;
@@ -217,22 +216,18 @@ define(
         if (count == 0)
             return;
 
-        var desired = [
-            sum[0] / count,
-            sum[1] / count
-        ];
+        desired[0] = sum[0] / count;
+        desired[1] = sum[1] / count;
         utils_normalise(desired);
         desired[0] *= k_max_speed;
         desired[1] *= k_max_speed;
 
-        var steer = [
-            desired[0] - curr.vel[0],
-            desired[1] - curr.vel[1]
-        ];
+        steer[0] = desired[0] - in_curr.vel[0];
+        steer[1] = desired[1] - in_curr.vel[1];
         utils_limit(steer, k_max_force);
 
-        curr.acc[0] += steer[0] * in_ratio;
-        curr.acc[1] += steer[1] * in_ratio;
+        in_curr.acc[0] += steer[0] * in_ratio;
+        in_curr.acc[1] += steer[1] * in_ratio;
 
     } // function separate
 
@@ -244,10 +239,8 @@ define(
 
     function alignement(in_arr_boids, in_curr, in_radius, in_ratio)
     {
-        var curr = in_curr;
+        count = sum[0] = sum[1] = 0; // reset
 
-        var sum = [0, 0];
-        var count = 0;
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
             if (in_arr_boids[j].len > in_radius)
@@ -262,22 +255,18 @@ define(
         if (count == 0)
             return;
 
-        var desired = [
-            sum[0] / count,
-            sum[1] / count
-        ];
+        desired[0] = sum[0] / count;
+        desired[1] = sum[1] / count;
         utils_normalise(desired);
         desired[0] *= k_max_speed;
         desired[1] *= k_max_speed;
 
-        var steer = [
-            desired[0] - curr.vel[0],
-            desired[1] - curr.vel[1]
-        ];
+        steer[0] = desired[0] - in_curr.vel[0];
+        steer[1] = desired[1] - in_curr.vel[1];
         utils_limit(steer, k_max_force);
 
-        curr.acc[0] -= steer[0] * in_ratio;
-        curr.acc[1] -= steer[1] * in_ratio;
+        in_curr.acc[0] -= steer[0] * in_ratio;
+        in_curr.acc[1] -= steer[1] * in_ratio;
 
     } // function alignement
 
@@ -289,10 +278,8 @@ define(
 
         var tmp_pos = utils_convertWorldPos(in_center, in_boid.pos)
 
-        var diff = [
-            in_center[0] - tmp_pos[0],
-            in_center[1] - tmp_pos[1]
-        ];
+        diff[0] = in_center[0] - tmp_pos[0];
+        diff[1] = in_center[1] - tmp_pos[1];
 
         if (utils_getLength(diff[0], diff[1]) > in_radius)
             return;
@@ -302,18 +289,14 @@ define(
 
         // 
 
-        var desired = [
-            in_center[0] - tmp_pos[0],
-            in_center[1] - tmp_pos[1]
-        ];
+        desired[0] = in_center[0] - tmp_pos[0];
+        desired[1] = in_center[1] - tmp_pos[1];
         utils_normalise(desired);
         desired[0] *= k_max_speed;
         desired[1] *= k_max_speed;
 
-        var steer = [
-            desired[0] - in_boid.vel[0],
-            desired[1] - in_boid.vel[1]
-        ];
+        steer[0] = desired[0] - in_boid.vel[0];
+        steer[1] = desired[1] - in_boid.vel[1];
         utils_limit(steer, k_max_force);
 
         in_boid.acc[0] += steer[0] * in_ratio;
@@ -334,6 +317,7 @@ define(
 
 
 
+    var cached_arr_boids = [];
 
     function update(time)
     {
@@ -348,12 +332,12 @@ define(
             //
             // behavior
 
-                var tmp_arr_boids = [];
-                update_cache( arr_boids, i, 80, tmp_arr_boids)
+                cached_arr_boids.length = 0; // clear
+                update_cache( arr_boids, i, 80, cached_arr_boids)
 
-                separate( tmp_arr_boids, curr, 40, 0.8 );
-                cohesion( tmp_arr_boids, curr, 80, 0.2 ); // <- max radius
-                alignement( tmp_arr_boids, curr, 80, 0.5 );
+                separate( cached_arr_boids, curr, 40, 0.8 );
+                cohesion( cached_arr_boids, curr, 80, 0.2 ); // <- max radius
+                alignement( cached_arr_boids, curr, 80, 0.5 );
 
                 // flee( curr, mouse, 100, 1 );
                 seek( curr, mouse, 100, 1 );
