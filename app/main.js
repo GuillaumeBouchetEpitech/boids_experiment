@@ -22,6 +22,8 @@ define(
     var k_height = 600;
     var k_hheight = k_height / 2;
 
+    var k_array_type = (typeof Float32Array !== 'undefined') ? Float32Array : Array;
+
     // constants
     //
 
@@ -63,9 +65,9 @@ define(
             for (var x = 0; x < k_size; ++x)
             {
                 arr_boids.push({
-                    pos: [60 + x * 40, 60 + y * 40],
-                    vel: [0, 0],
-                    acc: [0, 0]
+                    pos: new k_array_type([60 + x * 40, 60 + y * 40]),
+                    vel: new k_array_type([0, 0]),
+                    acc: new k_array_type([0, 0])
                 });
             }
     }
