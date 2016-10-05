@@ -315,6 +315,31 @@ define(
 
 
 
+
+
+
+    var mode_attract = true;
+
+    canvas.addEventListener('mousemove', callback_mousemove, false);
+    canvas.addEventListener('mousedown', callback_mousedown, false);
+
+    function callback_mousemove(e)
+    {
+        mouse[0] = e.pageX;
+        mouse[1] = e.pageY;
+    }
+
+    function callback_mousedown(e)
+    {
+        mode_attract = !mode_attract;
+    }
+
+
+
+
+
+
+
     var cached_arr_boids = [];
 
     function update(time)
@@ -337,8 +362,10 @@ define(
                 cohesion( cached_arr_boids, curr, 80, 0.2 ); // <- max radius
                 alignement( cached_arr_boids, curr, 80, 0.5 ); // <- max radius
 
-                // flee( curr, mouse, 100, 1 );
-                seek( curr, mouse, 100, 1 );
+                if (mode_attract)
+                    seek( curr, mouse, 100, 1 );
+                else
+                    flee( curr, mouse, 100, 2 );
 
             // behavior
             //
@@ -373,20 +400,6 @@ define(
     }
 
 
-
-
-
-
-
-    canvas.addEventListener('mousemove', callback_mousemove, false);
-
-    function callback_mousemove(e) {
-
-        // console.log(e);
-
-        mouse[0] = e.pageX;
-        mouse[1] = e.pageY;
-    }
 
 
 
@@ -461,7 +474,11 @@ define(
         // set the colors of the boids
         ctx.strokeStyle = "#000000";
         ctx.lineWidth = 3;
-        ctx.fillStyle = '#ffff88';
+
+        if (mode_attract)
+            ctx.fillStyle = '#00ff00';
+        else
+            ctx.fillStyle = '#ff0000';
 
         //
 
@@ -472,6 +489,10 @@ define(
         for (var y = -1; y <= 1; ++y)
             for (var x = -1; x <= 1; ++x)
                 drawCircle(mouse[0] + x * k_width, mouse[1] + y * k_height, 100, 0);
+
+        //
+
+        ctx.fillStyle = '#ffff88';
 
         //
 
