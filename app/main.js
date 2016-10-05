@@ -17,10 +17,15 @@ define(
     var k_max_speed = 100;
     var k_max_force = 10;
 
+    var k_width = 800;
+    var k_hwidth = k_width / 2;
+    var k_height = 600;
+    var k_hheight = k_height / 2;
+
     // constants
     //
 
-    
+
 
 
     //
@@ -128,20 +133,20 @@ define(
             arr_target[1]
         ];
 
-        if (Math.abs(diff[0]) > 400)
+        if (Math.abs(diff[0]) > k_hwidth)
         {
             if (arr_center[0] > arr_target[0])
-                ret_val[0] += 800;
+                ret_val[0] += k_width;
             else
-                ret_val[0] -= 800;
+                ret_val[0] -= k_width;
         }
 
-        if (Math.abs(diff[1]) > 300)
+        if (Math.abs(diff[1]) > k_hheight)
         {
             if (arr_center[1] > arr_target[1])
-                ret_val[1] += 600;
+                ret_val[1] += k_height;
             else
-                ret_val[1] -= 600;
+                ret_val[1] -= k_height;
         }
 
         return ret_val;
@@ -381,10 +386,10 @@ define(
             //
             // handle window limits
 
-                if (curr.pos[0] < 0)    { curr.pos[0] += 800; }
-                if (curr.pos[0] > 800)  { curr.pos[0] -= 800; }
-                if (curr.pos[1] < 0)    { curr.pos[1] += 600; }
-                if (curr.pos[1] > 600)  { curr.pos[1] -= 600; }
+                if (curr.pos[0] < 0)    { curr.pos[0] += k_width; }
+                if (curr.pos[0] > k_width)  { curr.pos[0] -= k_width; }
+                if (curr.pos[1] < 0)    { curr.pos[1] += k_height; }
+                if (curr.pos[1] > k_height)  { curr.pos[1] -= k_height; }
 
             // handle window limits
             //
@@ -475,7 +480,7 @@ define(
         //
 
         ctx.fillStyle="#ff8888";
-        ctx.fillRect(0,0,800,600); // <- clear the canvas
+        ctx.fillRect(0,0,k_width,k_height); // <- clear the canvas
 
         // set the colors of the boids
         ctx.strokeStyle = "#000000";
@@ -490,7 +495,7 @@ define(
 
         for (var y = -1; y <= 1; ++y)
             for (var x = -1; x <= 1; ++x)
-                drawCircle(mouse[0] + x * 800, mouse[1] + y * 600, 200, 0);
+                drawCircle(mouse[0] + x * k_width, mouse[1] + y * k_height, 200, 0);
 
         //
 
@@ -502,7 +507,7 @@ define(
 
             for (var y = -1; y <= 1; ++y)
                 for (var x = -1; x <= 1; ++x)
-                    drawCircle(curr.pos[0] + x * 800, curr.pos[1] + y * 600, 20, angle);
+                    drawCircle(curr.pos[0] + x * k_width, curr.pos[1] + y * k_height, 20, angle);
         }
 
         //
