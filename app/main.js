@@ -12,6 +12,18 @@ define(
 
 
     //
+    // constants
+
+    var k_max_speed = 100;
+    var k_max_force = 10;
+
+    // constants
+    //
+
+    
+
+
+    //
     // FPS METER
 
     var myFpsmeter_elem = document.getElementById('canvasesdiv');
@@ -139,16 +151,6 @@ define(
     //
     //
 
-
-
-    //
-    // constants
-
-    var k_max_speed = 100;
-    var k_max_force = 10;
-
-    // constants
-    //
 
 
 
