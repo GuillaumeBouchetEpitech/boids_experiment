@@ -186,7 +186,7 @@ define(
                 if (len > in_radius) // <- max radius
                     continue;
 
-                out_cache.push({boid:in_arr_boids[j], len:len});
+                out_cache.push({boid:in_arr_boids[j], cached_pos:tmp_pos, len:len});
             }
 
     } // function update_cache
@@ -197,10 +197,8 @@ define(
 
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            var tmp_pos = utils_convertWorldPos(in_curr.pos, in_arr_boids[j].boid.pos)
-
-            diff[0] = in_curr.pos[0] - tmp_pos[0];
-            diff[1] = in_curr.pos[1] - tmp_pos[1];
+            diff[0] = in_curr.pos[0] - in_arr_boids[j].cached_pos[0];
+            diff[1] = in_curr.pos[1] - in_arr_boids[j].cached_pos[1];
 
             if (in_arr_boids[j].len > in_radius)
                 continue;
