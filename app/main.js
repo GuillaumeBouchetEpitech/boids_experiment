@@ -69,7 +69,7 @@ define(
             }
     } // /boids creation
 
-    var mouse = [0,0];
+    var mouse = new k_array_type([0, 0]);
 
 
 
@@ -81,11 +81,11 @@ define(
     // http://forums.parallax.com/discussion/147522/dog-leg-hypotenuse-approximation
     function hypot(a, b)
     {
-        a = Math.abs(a)
-        b = Math.abs(b)
-        var lo = Math.min(a, b)
-        var hi = Math.max(a, b)
-        return hi + 3 * lo / 32 + Math.max(0, 2 * lo - hi) / 8 + Math.max(0, 4 * lo - hi) / 16
+        a = Math.abs(a);
+        b = Math.abs(b);
+        var lo = Math.min(a, b);
+        var hi = Math.max(a, b);
+        return hi + 3 * lo / 32 + Math.max(0, 2 * lo - hi) / 8 + Math.max(0, 4 * lo - hi) / 16;
     }
 
     function utils_getLength(x, y)
@@ -337,7 +337,7 @@ define(
 
                 separate( cached_arr_boids, curr, 40, 0.8 );
                 cohesion( cached_arr_boids, curr, 80, 0.2 ); // <- max radius
-                alignement( cached_arr_boids, curr, 80, 0.5 );
+                alignement( cached_arr_boids, curr, 80, 0.5 ); // <- max radius
 
                 // flee( curr, mouse, 100, 1 );
                 seek( curr, mouse, 100, 1 );
