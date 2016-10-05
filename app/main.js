@@ -54,11 +54,8 @@ define(
 
 
     var arr_boids = [];
+    { // boids creation
 
-
-    var mouse = [0,0];
-
-    {
         var k_size = 10;
 
         for (var y = 0; y < k_size; ++y)
@@ -70,7 +67,10 @@ define(
                     acc: new k_array_type([0, 0])
                 });
             }
-    }
+    } // /boids creation
+
+    var mouse = [0,0];
+
 
 
     //
@@ -196,18 +196,14 @@ define(
         var count = 0;
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            var tmp = in_arr_boids[j].boid;
-
-            var tmp_pos = utils_convertWorldPos(curr.pos, tmp.pos)
+            var tmp_pos = utils_convertWorldPos(curr.pos, in_arr_boids[j].boid.pos)
 
             var diff = [
                 curr.pos[0] - tmp_pos[0],
                 curr.pos[1] - tmp_pos[1]
             ];
 
-            var len = in_arr_boids[j].len;
-
-            if (len > in_radius)
+            if (in_arr_boids[j].len > in_radius)
                 continue;
 
             utils_normalise(diff);
@@ -254,15 +250,11 @@ define(
         var count = 0;
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            var tmp = in_arr_boids[j].boid;
-
-            var len = in_arr_boids[j].len;
-
-            if (len > in_radius)
+            if (in_arr_boids[j].len > in_radius)
                 continue;
 
-            sum[0] += tmp.vel[0];
-            sum[1] += tmp.vel[1];
+            sum[0] += in_arr_boids[j].boid.vel[0];
+            sum[1] += in_arr_boids[j].boid.vel[1];
 
             ++count;
         }
@@ -302,9 +294,7 @@ define(
             in_center[1] - tmp_pos[1]
         ];
 
-        var len = utils_getLength(diff[0], diff[1]);
-
-        if (len > in_radius)
+        if (utils_getLength(diff[0], diff[1]) > in_radius)
             return;
 
         // is it in range?
