@@ -366,7 +366,7 @@ define(
                 alignement( tmp_arr_boids, curr, 80, 0.5 );
 
                 // flee( curr, mouse, 100, 1 );
-                seek( curr, mouse, 200, 1 );
+                seek( curr, mouse, 100, 1 );
 
             // behavior
             //
@@ -499,7 +499,7 @@ define(
 
         for (var y = -1; y <= 1; ++y)
             for (var x = -1; x <= 1; ++x)
-                drawCircle(mouse[0] + x * k_width, mouse[1] + y * k_height, 200, 0);
+                drawCircle(mouse[0] + x * k_width, mouse[1] + y * k_height, 100, 0);
 
         //
 
