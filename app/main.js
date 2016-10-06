@@ -191,7 +191,7 @@ define(
 
     } // function update_cache
 
-    function separate(in_arr_boids, in_curr, in_radius, in_ratio)
+    function separate(in_arr_boids, in_curr, in_radius_min, in_radius_max, in_ratio)
     {
         count = sum[0] = sum[1] = 0; // reset
 
@@ -200,7 +200,8 @@ define(
             diff[0] = in_curr.pos[0] - in_arr_boids[j].cached_pos[0];
             diff[1] = in_curr.pos[1] - in_arr_boids[j].cached_pos[1];
 
-            if (in_arr_boids[j].len > in_radius)
+            if (in_arr_boids[j].len < in_radius_min ||
+                in_arr_boids[j].len > in_radius_max)
                 continue;
 
             utils_normalise(diff);
@@ -229,19 +230,20 @@ define(
 
     } // function separate
 
-    function cohesion(in_arr_boids, in_curr, in_radius, in_ratio)
+    function cohesion(in_arr_boids, in_curr, in_radius_min, in_radius_max, in_ratio)
     {
         // cohesion is just separate with a negative ratio
-        separate(in_arr_boids, in_curr, in_radius, in_ratio * -1);
+        separate(in_arr_boids, in_curr, in_radius_min, in_radius_max, in_ratio * -1);
     }
 
-    function alignement(in_arr_boids, in_curr, in_radius, in_ratio)
+    function alignement(in_arr_boids, in_curr, in_radius_min, in_radius_max, in_ratio)
     {
         count = sum[0] = sum[1] = 0; // reset
 
         for (var j = 0; j < in_arr_boids.length; ++j)
         {
-            if (in_arr_boids[j].len > in_radius)
+            if (in_arr_boids[j].len < in_radius_min ||
+                in_arr_boids[j].len > in_radius_max)
                 continue;
 
             sum[0] += in_arr_boids[j].boid.vel[0];
@@ -342,6 +344,13 @@ define(
 
     var cached_arr_boids = [];
 
+    var radius = {
+        sep: 20,
+        coh: 80,
+        alg: 80,
+    }
+
+
     function update(time)
     {
         for (var i = 0; i < arr_boids.length; ++i)
@@ -356,11 +365,11 @@ define(
             // behavior
 
                 cached_arr_boids.length = 0; // clear
-                update_cache( arr_boids, i, 80, cached_arr_boids)
+                update_cache( arr_boids, i, 160, cached_arr_boids)
 
-                separate( cached_arr_boids, curr, 40, 0.8 );
-                cohesion( cached_arr_boids, curr, 80, 0.2 ); // <- max radius
-                alignement( cached_arr_boids, curr, 80, 0.5 ); // <- max radius
+                separate( cached_arr_boids, curr, 0,radius.sep, 2.0 );
+                cohesion( cached_arr_boids, curr, radius.sep,radius.coh, 0.2 ); // <- max radius
+                alignement( cached_arr_boids, curr, radius.sep,radius.alg, 0.5 ); // <- max radius
 
                 if (mode_attract)
                     seek( curr, mouse, 100, 1 );
@@ -409,7 +418,6 @@ define(
 
     function drawCircle(_x, _y, _radius, _deg_angle)
     {
-
         ctx.beginPath();
         ctx.arc(_x, _y, _radius, 0, 2 * Math.PI, false);
         ctx.stroke();
