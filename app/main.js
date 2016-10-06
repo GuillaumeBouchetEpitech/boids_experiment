@@ -345,7 +345,7 @@ define(
     var cached_arr_boids = [];
 
     var radius = {
-        sep: 20,
+        sep: 40,
         coh: 80,
         alg: 80,
     }
@@ -367,7 +367,7 @@ define(
                 cached_arr_boids.length = 0; // clear
                 update_cache( arr_boids, i, 160, cached_arr_boids)
 
-                separate( cached_arr_boids, curr, 0,radius.sep, 2.0 );
+                separate( cached_arr_boids, curr, 0,radius.sep, 5.0 );
                 cohesion( cached_arr_boids, curr, radius.sep,radius.coh, 0.2 ); // <- max radius
                 alignement( cached_arr_boids, curr, radius.sep,radius.alg, 0.5 ); // <- max radius
 
