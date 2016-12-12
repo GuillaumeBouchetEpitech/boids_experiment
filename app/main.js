@@ -1,3 +1,4 @@
+"use strict";
 
 define(
     [
@@ -19,10 +20,12 @@ define(
 
     var k_width = 800;
     var k_hwidth = k_width / 2;
-    var k_height = 600;
+    var k_height = 550;
     var k_hheight = k_height / 2;
 
     var k_array_type = (typeof Float32Array !== 'undefined') ? Float32Array : Array;
+
+    var k_tex_size = {};
 
     // constants
     //
@@ -56,15 +59,24 @@ define(
     var arr_boids = [];
     { // boids creation
 
-        var k_size = 10;
+        var k_size_x = 12;
+        var k_size_y = 8;
 
-        for (var y = 0; y < k_size; ++y)
-            for (var x = 0; x < k_size; ++x)
+        k_tex_size.x = 2048 / k_size_x;
+        k_tex_size.y = 1417 / k_size_y;
+
+        for (var y = 0; y < k_size_y; ++y)
+            for (var x = 0; x < k_size_x; ++x)
             {
                 arr_boids.push({
+                    start: new k_array_type([60 + x * 60, 60 + y * 60]),
                     pos: new k_array_type([60 + x * 40, 60 + y * 40]),
                     vel: new k_array_type([0, 0]),
-                    acc: new k_array_type([0, 0])
+                    acc: new k_array_type([0, 0]),
+                    tex: new k_array_type([
+                        x * k_tex_size.x,
+                        y * k_tex_size.y
+                    ])
                 });
             }
     } // /boids creation
@@ -345,9 +357,9 @@ define(
     var cached_arr_boids = [];
 
     var radius = {
-        sep: 40,
-        coh: 80,
-        alg: 80,
+        sep: 10,
+        coh: 20,
+        alg: 20,
     }
 
 
@@ -371,10 +383,13 @@ define(
                 cohesion( cached_arr_boids, curr, radius.sep,radius.coh, 0.2 ); // <- max radius
                 alignement( cached_arr_boids, curr, radius.sep,radius.alg, 0.5 ); // <- max radius
 
+
+                seek( curr, curr.start, 10000, 1 );
+
                 if (mode_attract)
-                    seek( curr, mouse, 100, 1 );
+                    seek( curr, mouse, 100, 3 );
                 else
-                    flee( curr, mouse, 100, 2 );
+                    flee( curr, mouse, 100, 3 );
 
             // behavior
             //
@@ -464,7 +479,15 @@ define(
 
 
 
-    tick();
+
+    var img_paint = new Image();
+    img_paint.onload = function () {
+
+        // entry point
+        tick();
+    }
+
+    img_paint.src = "res/2016-12-11.jpg";
 
     function tick()
     {
@@ -476,7 +499,7 @@ define(
 
         //
 
-        ctx.fillStyle="#ff8888";
+        ctx.fillStyle="#000000";
         ctx.fillRect(0,0,k_width,k_height); // <- clear the canvas
 
         // set the colors of the boids
@@ -512,7 +535,22 @@ define(
 
             for (var y = -1; y <= 1; ++y)
                 for (var x = -1; x <= 1; ++x)
-                    drawCircle(curr.pos[0] + x * k_width, curr.pos[1] + y * k_height, 20, angle);
+            // for (var y = 0; y <= 0; ++y)
+            //     for (var x = 0; x <= 0; ++x)
+                {
+                    // drawCircle(curr.pos[0] + x * k_width, curr.pos[1] + y * k_height, 40, angle);
+
+                    var tmp_x = curr.pos[0] + x * k_width;
+                    var tmp_y = curr.pos[1] + y * k_height;
+
+                    ctx.drawImage(img_paint,
+                        curr.tex[0], curr.tex[1],
+                        k_tex_size.x, k_tex_size.y,
+                        tmp_x - 30, tmp_y - 30,
+                        60, 60);
+
+                    // console.log(tmp_x, tmp_y);
+                }
         }
 
         //
